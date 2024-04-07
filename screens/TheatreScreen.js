@@ -8,7 +8,6 @@ const TheatreScreen = () => {
   const route = useRoute();
   const [selectedSeats, setSelectedSeats] = useState([]);
 
-
   console.log(route.params);
 
   useLayoutEffect(() => {
@@ -42,47 +41,78 @@ const TheatreScreen = () => {
   const renderSeats = () => {
     return (
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View style={{ flexDirection: 'column' }}>
-          {route.params.rows.map((row, rowIndex) => (
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginBottom: 10,
-              }}
-              key={rowIndex}
-            >
-              <View style={{ width: 30, marginRight: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 15 }}>
-                  {row.row}
-                </Text>
+        <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+          {route.params.rows.map((row, rowIndex) => {
+            let labelContent = '';
+            if (row.row === 'A') {
+              labelContent = "RECLINER - Rs. 450";
+            } else if (row.row === 'B') {
+              labelContent = "DIAMOND - Rs. 400";
+            } else if (row.row === 'E') {
+              labelContent = "PLATINUM - Rs. 350";
+            }
+  
+            return (
+              <View key={rowIndex}>
+                {labelContent !== '' && (
+                  <Text style={styles.seatLabel}>
+                    {labelContent}
+                  </Text>
+                )}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: 10,
+                  }}
+                >
+                  <View style={{ width: 30, marginRight: 10 }}>
+                    <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 15 }}>
+                      {row.row}
+                    </Text>
+                  </View>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    {row.seats.map((seat, seatIndex) => {
+                      const separator = seatIndex === 12 && row.row !== 'A' ? <View style={{ width: 20 }}/> : null;
+                      return (
+                        <React.Fragment key={seatIndex}>
+                          {separator}
+                          <Pressable
+                            onPress={() => handleSeatPress(row.row, seat.number)}
+                            style={[
+                              styles.seat,
+                              selectedSeats.some(
+                                (selectedSeat) =>
+                                  selectedSeat.row === row.row &&
+                                  selectedSeat.seat === seat.number
+                              ) && styles.selectedSeat,
+                              seat.bookingStatus === "disabled" && styles.bookedSeat,
+                            ]}
+                            disabled={seat.bookingStatus === "disabled"}
+                          >
+                            <Text>{seat.number}</Text>
+                          </Pressable>
+                        </React.Fragment>
+                      );
+                    })}
+                  </View>
+                </View>
               </View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                {row.seats.map((seat, seatIndex) => (
-                  <Pressable
-                    key={seatIndex} // Added key here for proper React element mapping
-                    onPress={() => handleSeatPress(row.row, seat.number)}
-                    style={[
-                      styles.seat,
-                      selectedSeats.some(
-                        (selectedSeat) =>
-                          selectedSeat.row === row.row &&
-                          selectedSeat.seat === seat.number
-                      ) && styles.selectedSeat,
-                      seat.bookingStatus === "disabled" && styles.bookedSeat,
-                    ]}
-                    disabled={seat.bookingStatus === "disabled"}
-                  >
-                    <Text>{seat.number}</Text>
-                  </Pressable>
-                ))}
-              </View>
-            </View>
-          ))}
+            );
+          })}
+          {/* Screen indicator */}
+          <View style={styles.screenIndicator}>
+            <View style={styles.screenLine} />
+            <Text style={styles.screenText}>SCREEN THIS WAY</Text>
+          </View>
         </View>
       </ScrollView>
     );
   };
+  
+  
+  
+  
   
   const handleSeatPress = (row, seat) => {
     console.log("row", row);
@@ -254,5 +284,27 @@ const styles = StyleSheet.create({
   bookedSeat: {
     backgroundColor: "#989898",
     borderColor: "transparent",
+  },
+  seatLabel: {
+    textAlign: 'left',
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingVertical: 8,
+    backgroundColor: 'transparent',
+  },
+  screenIndicator: {
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  screenLine: {
+    width: '60%',
+    height: 1,
+    backgroundColor: 'black',
+    marginTop: 50,
+    marginBottom: 10,
+  },
+  screenText: {
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
