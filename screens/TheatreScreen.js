@@ -74,11 +74,12 @@ const TheatreScreen = () => {
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     {row.seats.map((seat, seatIndex) => {
                       const separator = seatIndex === 12 && row.row !== 'A' ? <View style={{ width: 20 }}/> : null;
+                      const isBooked = seat.bookingStatus === "disabled";
                       return (
                         <React.Fragment key={seatIndex}>
                           {separator}
                           <Pressable
-                            onPress={() => handleSeatPress(row.row, seat.number)}
+                            onPress={() => !isBooked && handleSeatPress(row.row, seat.number)}
                             style={[
                               styles.seat,
                               selectedSeats.some(
@@ -86,9 +87,9 @@ const TheatreScreen = () => {
                                   selectedSeat.row === row.row &&
                                   selectedSeat.seat === seat.number
                               ) && styles.selectedSeat,
-                              seat.bookingStatus === "disabled" && styles.bookedSeat,
+                              isBooked && styles.bookedSeat,
                             ]}
-                            disabled={seat.bookingStatus === "disabled"}
+                            disabled={isBooked}
                           >
                             <Text>{seat.number}</Text>
                           </Pressable>
@@ -109,7 +110,6 @@ const TheatreScreen = () => {
       </ScrollView>
     );
   };
-  
   
   
   
