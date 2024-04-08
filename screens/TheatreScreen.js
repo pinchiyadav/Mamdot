@@ -1,13 +1,53 @@
-import React, { useLayoutEffect, useState, useRef } from "react";
+import React, { useLayoutEffect, useState, useRef, useEffect } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View, Animated } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
+
+const DropdownMenu = ({ selectedValue, onValueChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleMenuItemPress = (value) => {
+    onValueChange(value);
+    setIsOpen(false);
+  };
+
+  return (
+    <View style={styles.dropdownContainer}>
+      <Text>Select No of Seats:</Text>
+      <Pressable onPress={toggleMenu} style={styles.dropdownTrigger}>
+        <Text style={{fontWeight:'bold'}}>{selectedValue} Seats</Text>
+      </Pressable>
+      {isOpen && (
+        <View style={styles.dropdownMenu}>
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((value) => (
+            <Pressable
+              key={value}
+              style={[
+                styles.dropdownMenuItem,
+                selectedValue === value && styles.selectedDropdownMenuItem // Apply the new style conditionally
+              ]}
+              onPress={() => handleMenuItemPress(value)}
+            >
+              <Text>{value} Seats</Text>
+            </Pressable>
+          ))}
+        </View>
+      )}
+    </View>
+  );
+};
+
 
 const TheatreScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [userType, setUserType] = useState(null);
+  const [selectedSeatCount, setSelectedSeatCount] = useState(1); // Track selected number of seats
   const scrollX = useRef(new Animated.Value(0)).current;
 
   console.log(route.params);
@@ -38,13 +78,32 @@ const TheatreScreen = () => {
     });
   }, []);
 
+  useEffect(() => {
+    // Clear selected seats when user type changes
+    setSelectedSeats([]);
+  }, [userType]);
+
+  useEffect(() => {
+    // Deselect extra seats if the selected number of seats is reduced
+    if (selectedSeats.length > selectedSeatCount) {
+      setSelectedSeats((prevSelectedSeats) => prevSelectedSeats.slice(0, selectedSeatCount));
+    }
+  }, [selectedSeatCount]);
+
   const handleUserTypeSelect = (type) => {
     setUserType(type);
   };
 
+
   const handleSeatPress = (row, seat) => {
     console.log("row", row);
     console.log("seat", seat);
+
+    // Limit selection based on selected seat count
+    if (selectedSeats.length >= selectedSeatCount) {
+      // Deselect the first selected seat if trying to select more
+      setSelectedSeats((prevState) => prevState.slice(1));
+    }
 
     const isSelected = selectedSeats.some(
       (selectedSeat) => selectedSeat.row === row && selectedSeat.seat === seat
@@ -69,8 +128,8 @@ const TheatreScreen = () => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ alignItems: "center" }}
         pinchGestureEnabled={true}
-        maximumZoomScale={2} // You can adjust the maximum zoom scale here
-        minimumZoomScale={0.5} // You can adjust the minimum zoom scale here
+        maximumZoomScale={2}
+        minimumZoomScale={0.5}
         automaticallyAdjustContentInsets={false}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
@@ -178,15 +237,20 @@ const TheatreScreen = () => {
     <View style={{ flex: 1 }}>
       <View style={styles.userTypeContainer}>
         <Pressable style={userType === "User1" ? styles.selectedUserButton : styles.userButton} onPress={() => handleUserTypeSelect("User1")}>
-          <Text>User 1</Text>
+          <Text>Officer</Text>
         </Pressable>
         <Pressable style={userType === "User2" ? styles.selectedUserButton : styles.userButton} onPress={() => handleUserTypeSelect("User2")}>
-          <Text>User 2</Text>
+          <Text>JCO</Text>
         </Pressable>
         <Pressable style={userType === "User3" ? styles.selectedUserButton : styles.userButton} onPress={() => handleUserTypeSelect("User3")}>
-          <Text>User 3</Text>
+          <Text>OR</Text>
         </Pressable>
       </View>
+
+      <DropdownMenu
+        selectedValue={selectedSeatCount}
+        onValueChange={(value) => setSelectedSeatCount(value)}
+      />
 
       <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
         {renderSeats()}
@@ -337,5 +401,37 @@ const styles = StyleSheet.create({
   },
   disabledSeat: {
     opacity: 0.5,
+  },
+  dropdownContainer: {
+    position: "relative",
+    zIndex: 1,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  dropdownTrigger: {
+    backgroundColor: "#ECECEC",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  
+  dropdownMenu: {
+    position: "absolute",
+    top: 40,
+    backgroundColor: "#ECECEC",
+    borderRadius: 5,
+    zIndex: 2,
+    width: '40%', // You can adjust this width as needed
+    alignSelf: 'center',
+  },
+  
+
+  dropdownMenuItem: {
+    padding: 10,
+    width: "100%",
+    alignItems: "center",
+  },
+  selectedDropdownMenuItem: {
+    backgroundColor: "#C0C0C0", // Different background color to highlight selection
   },
 });
