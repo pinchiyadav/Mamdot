@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useLayoutEffect, useState, useRef } from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View, Animated } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
@@ -8,6 +8,7 @@ const TheatreScreen = () => {
   const route = useRoute();
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [userType, setUserType] = useState(null);
+  const scrollX = useRef(new Animated.Value(0)).current;
 
   console.log(route.params);
 
@@ -63,7 +64,20 @@ const TheatreScreen = () => {
 
   const renderSeats = () => {
     return (
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ alignItems: "center" }}
+        pinchGestureEnabled={true}
+        maximumZoomScale={2} // You can adjust the maximum zoom scale here
+        minimumZoomScale={0.5} // You can adjust the minimum zoom scale here
+        automaticallyAdjustContentInsets={false}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          { useNativeDriver: false }
+        )}
+        scrollEventThrottle={16}
+      >
         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
           {route.params.rows.map((row, rowIndex) => {
             let labelContent = '';
@@ -175,8 +189,6 @@ const TheatreScreen = () => {
       </View>
 
       <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
-        
-
         {renderSeats()}
 
         <View style={styles.legendContainer}>
