@@ -698,7 +698,7 @@ const MovieScreen = () => {
       ],
     },
   ];
-  console.log(locationId);
+  //console.log(locationId);
   const [reqData, setreqData] = useState([]);
   useEffect(() => {
     const fetchTheatres = async () => {
@@ -719,7 +719,8 @@ const MovieScreen = () => {
     fetchTheatres();
   }, []);
 
-  console.log(reqData);
+  //console.log(reqData);
+  console.log(route);
   return (
     <View>
       <ScrollView contentContainerStyle={{ marginLeft: 10 }}>

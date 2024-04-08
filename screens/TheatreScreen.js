@@ -39,77 +39,82 @@ const TheatreScreen = () => {
 
   const result = seatNumbers.join(" ");
   const renderSeats = () => {
-    return (
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-          {route.params.rows.map((row, rowIndex) => {
-            let labelContent = '';
-            if (row.row === 'A') {
-              labelContent = "RECLINER - Rs. 450";
-            } else if (row.row === 'B') {
-              labelContent = "DIAMOND - Rs. 400";
-            } else if (row.row === 'E') {
-              labelContent = "PLATINUM - Rs. 350";
-            }
-  
-            return (
-              <View key={rowIndex}>
-                {labelContent !== '' && (
-                  <Text style={styles.seatLabel}>
-                    {labelContent}
+  return (
+    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+        {route.params.rows.map((row, rowIndex) => {
+          let labelContent = '';
+          let labelStyle = styles.seatLabel;
+          if (row.row === 'A') {
+            labelContent = "RECLINER - Rs. 450";
+          } else if (row.row === 'B') {
+            labelContent = "DIAMOND - Rs. 400";
+            labelStyle = [styles.seatLabel, { marginTop: 10 }];
+          } else if (row.row === 'E') {
+            labelContent = "PLATINUM - Rs. 350";
+          }
+
+          return (
+            <View key={rowIndex}>
+              {labelContent !== '' && (
+                <Text style={labelStyle}>
+                  {labelContent}
+                </Text>
+              )}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 10,
+                }}
+              >
+                <View style={{ width: 30, marginRight: 10 }}>
+                  <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 15 }}>
+                    {row.row}
                   </Text>
-                )}
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginBottom: 10,
-                  }}
-                >
-                  <View style={{ width: 30, marginRight: 10 }}>
-                    <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 15 }}>
-                      {row.row}
-                    </Text>
-                  </View>
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    {row.seats.map((seat, seatIndex) => {
-                      const separator = seatIndex === 12 && row.row !== 'A' ? <View style={{ width: 20 }}/> : null;
-                      const isBooked = seat.bookingStatus === "disabled";
-                      return (
-                        <React.Fragment key={seatIndex}>
-                          {separator}
-                          <Pressable
-                            onPress={() => !isBooked && handleSeatPress(row.row, seat.number)}
-                            style={[
-                              styles.seat,
-                              selectedSeats.some(
-                                (selectedSeat) =>
-                                  selectedSeat.row === row.row &&
-                                  selectedSeat.seat === seat.number
-                              ) && styles.selectedSeat,
-                              isBooked && styles.bookedSeat,
-                            ]}
-                            disabled={isBooked}
-                          >
-                            <Text>{seat.number}</Text>
-                          </Pressable>
-                        </React.Fragment>
-                      );
-                    })}
-                  </View>
+                </View>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  {row.seats.map((seat, seatIndex) => {
+                    const isLastSeatInRowB = seatIndex === 4 && row.row === 'B';
+                    const isLastSeatInRowA = seatIndex === 8 && row.row === 'A';
+                    const separator = isLastSeatInRowA ? <View style={{ width: 0 }}/> : isLastSeatInRowB ? <View style={{ width: 420 }}/> : seatIndex === 8 ? <View style={{ width: 20 }}/> : null;
+                    const isBooked = seat.bookingStatus === "disabled";
+                    return (
+                      <React.Fragment key={seatIndex}>
+                        {separator}
+                        <Pressable
+                          onPress={() => !isBooked && handleSeatPress(row.row, seat.number)}
+                          style={[
+                            styles.seat,
+                            selectedSeats.some(
+                              (selectedSeat) =>
+                                selectedSeat.row === row.row &&
+                                selectedSeat.seat === seat.number
+                            ) && styles.selectedSeat,
+                            isBooked && styles.bookedSeat,
+                          ]}
+                          disabled={isBooked}
+                        >
+                          <Text>{seat.number}</Text>
+                        </Pressable>
+                      </React.Fragment>
+                    );
+                  })}
                 </View>
               </View>
-            );
-          })}
-          {/* Screen indicator */}
-          <View style={styles.screenIndicator}>
-            <View style={styles.screenLine} />
-            <Text style={styles.screenText}>SCREEN THIS WAY</Text>
-          </View>
+            </View>
+          );
+        })}
+        {/* Screen indicator */}
+        <View style={styles.screenIndicator}>
+          <View style={styles.screenLine} />
+          <Text style={styles.screenText}>SCREEN THIS WAY</Text>
         </View>
-      </ScrollView>
-    );
-  };
+      </View>
+    </ScrollView>
+  );
+};
+
   
   
   
@@ -147,7 +152,7 @@ const TheatreScreen = () => {
     //  setRows(updatedRows);
     //  setSelectedSeats([]);
 
-    navigation.navigate("Food", {
+    navigation.navigate("Confirm", {
       mall: route.params.mall,
       showtime: route.params.showtime,
       name: route.params.name,
@@ -157,6 +162,7 @@ const TheatreScreen = () => {
       selectedSeats: selectedSeats,
       docId: route.params.docId,
     });
+    console.log(route.params);
   };
   return (
     <>
