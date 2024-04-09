@@ -59,7 +59,7 @@ import {
             movieId:item._id
           })}
             style={{
-              backgroundColor: "#ffc40c",
+              backgroundColor: "#F84464",
               padding: 10,
               borderRadius: 6,
               marginRight: 10,
