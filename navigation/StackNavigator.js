@@ -11,7 +11,7 @@ import MovieScreen from "../screens/MovieScreen";
 import TheatreScreen from "../screens/TheatreScreen";
 import FoodScreen from "../screens/FoodScreen";
 import Confirmation from "../screens/Confirmation";
-import Ticket from "../screens/Ticket";
+import TicketScreen from "../screens/TicketScreen";
 
 const ProfileStack = createNativeStackNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -25,7 +25,7 @@ function HomeStackScreens() {
       <HomeStack.Screen name="Theatre" component={TheatreScreen} />
       <HomeStack.Screen name="Confirm" component={Confirmation} />
       <HomeStack.Screen name="Food" component={FoodScreen} />
-      <HomeStack.Screen name="Ticket" component={Ticket} />
+      <HomeStack.Screen name="Ticket" component={TicketScreen} />
 
     </HomeStack.Navigator>
   );

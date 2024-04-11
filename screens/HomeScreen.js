@@ -60,7 +60,7 @@ const HomeScreen = () => {
   }, [selectedCity]);
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <Text>Hello Sujan Anand</Text>,
+      headerLeft: () => <Text>YY</Text>,
       headerStyle: {
         backgroundColor: "#F5F5F5",
         shadowColor: "transparent",
@@ -72,7 +72,6 @@ const HomeScreen = () => {
         <Pressable
           style={{ flexDirection: "row", alignItems: "center", gap: 4 }}
         >
-          <Ionicons name="notifications-outline" size={24} color="black" />
           <Ionicons
             onPress={() => navigation.navigate("Places")}
             name="location-outline"
@@ -82,10 +81,7 @@ const HomeScreen = () => {
 
           <Pressable onPress={() => navigation.navigate("Places")}>
             <Animated.Text
-              style={[
-                styles.text,
-                { transform: [{ translateX: moveAnimation }] },
-              ]}
+              
             >
               <Text>{selectedCity}</Text>
             </Animated.Text>

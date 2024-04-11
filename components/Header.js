@@ -9,21 +9,21 @@ import {
   
   const Header = () => {
     return (
-      <View style={{ marginBottom: 55 }}>
+      <View style={{ marginBottom: 5 }}>
         <ImageBackground
-          style={{ height: 200, resizeMode: "contain" }}
+          style={{ height: 70, resizeMode: "contain" }}
           source={{
-            uri: "https://originserver-static1-uat.pvrcinemas.com/newweb/movies/thumb/374x226/HO00022376.jpg?v=4",
+            uri: "",
           }}
         >
           <Pressable
             style={{
-              height: 90,
+              height: 60,
               backgroundColor: "white",
               padding: 10,
               borderRadius: 5,
               width: "90%",
-              top: 160,
+              top: 10,
               marginLeft: "auto",
               marginRight: "auto",
             }}
@@ -36,28 +36,17 @@ import {
               }}
             >
               <View>
-                <Text style={{ fontSize: 15, fontWeight: "500" }}>
-                  Releasing in 1 Day
-                </Text>
+                
                 <Text
                   style={{ marginVertical: 5, fontSize: 16, fontWeight: "700" }}
                 >
-                  CUSTODY
+                  Now showing
                 </Text>
                 <Text style={{ fontSize: 15, color: "gray", fontWeight: "500" }}>
-                  U.A • TELUGU
+                 
                 </Text>
               </View>
-              <Pressable
-                style={{
-                  backgroundColor: "#F84464",
-                  padding: 10,
-                  borderRadius: 6,
-                  marginRight: 10,
-                }}
-              >
-                <Text>BOOK</Text>
-              </Pressable>
+              
             </View>
           </Pressable>
         </ImageBackground>
