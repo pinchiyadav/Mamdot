@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/HomeScreen";
 import PlacesScreen from "../screens/PlacesScreen";
-import ProfileScreen from "../screens/ProfileScreen";
+import ProfileScreen from "../screens/MyTicketsScreen";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from '@expo/vector-icons';
@@ -12,8 +12,9 @@ import TheatreScreen from "../screens/TheatreScreen";
 import FoodScreen from "../screens/FoodScreen";
 import Confirmation from "../screens/Confirmation";
 import TicketScreen from "../screens/TicketScreen";
+import MyTicketsScreen from "../screens/MyTicketsScreen";
 
-const ProfileStack = createNativeStackNavigator();
+const TicketsStack = createNativeStackNavigator();
 const HomeStack = createNativeStackNavigator();
 
 function HomeStackScreens() {
@@ -31,11 +32,11 @@ function HomeStackScreens() {
   );
 }
 
-function ProfileStackScreens() {
+function MyTicketsStackScreens() {
   return (
-    <ProfileStack.Navigator>
-      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
-    </ProfileStack.Navigator>
+    <TicketsStack.Navigator>
+      <TicketsStack.Screen name="My Tickets" component={MyTicketsScreen} />
+    </TicketsStack.Navigator>
   );
 }
 
@@ -62,17 +63,17 @@ function Navigation() {
         />
 
         <Tab.Screen
-          name="ProfileScreen"
-          component={ProfileStackScreens}
+          name="MyTicketsScreen"
+          component={MyTicketsStackScreens}
           options={{
-            tabBarLabel: "Profile",
+            tabBarLabel: "Ticket",
             tabBarLabelStyle: { color: "black" },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <Ionicons name="person" size={24} color="black" />
+                <Ionicons name="ticket" size={24} color="black" />
               ) : (
-                <Ionicons name="person-outline" size={24} color="black" />
+                <Ionicons name="ticket-outline" size={24} color="black" />
               ),
           }}
         />

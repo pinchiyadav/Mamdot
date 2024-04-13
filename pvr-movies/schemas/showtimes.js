@@ -5,6 +5,10 @@ export default defineType({
     type:'document',
     fields:[
         {
+            name:"date",
+            type:"date",
+        },
+        {
             name:"time",
             type:"string",
         },

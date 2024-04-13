@@ -1,12 +1,5 @@
-import {
-  FlatList,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
 import React, { useLayoutEffect, useState, useContext, useEffect } from "react";
+import { FlatList, Pressable, ScrollView, Text, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Calendar from "../components/Calendar";
 import moment from "moment";
@@ -15,13 +8,11 @@ import { client } from "../pvr-movies/sanity";
 
 const MovieScreen = () => {
   const navigation = useNavigation();
-  const { selectedCity, setSelectedCity } = useContext(Place);
+  const { locationId } = useContext(Place);
   const route = useRoute();
   const today = moment().format("YYYY-MM-DD");
   const [selectedDate, setSelectedDate] = useState(today);
-  const [mall, setMall] = useState([]);
-  const { locationId } = useContext(Place);
-  const [reqData, setreqData] = useState([]);
+  const [reqData, setReqData] = useState([]);
   const [expandedTheaters, setExpandedTheaters] = useState([]);
 
   useLayoutEffect(() => {
@@ -35,28 +26,29 @@ const MovieScreen = () => {
         shadowRadius: 3,
       },
     });
-  }, []);
+  }, [navigation, route.params.title]);
 
   useEffect(() => {
     const fetchTheatres = async () => {
       const response = await client.fetch(
         `*[_type == "theatre" && location._ref == "${locationId}"]{
           ...,
-          "showtimes": *[_type == 'showtimes' && references(^._id) && references('movie', "${route.params.movieId}")]{
+          "showtimes": *[_type == 'showtimes' && time != "" && date == "${selectedDate}" && references(^._id) && references('movie', "${route.params.movieId}")]{
             _id,
             time,
             row,
             "theatre": theatre->name,
             "movie": movie->name,
+            date
           }
         }`
       );
-      setreqData(response);
+      setReqData(response);
       // Automatically expand all theaters to show showtimes by default
-      setExpandedTheaters(response.map((_) => _.name));
+      setExpandedTheaters(response.map((theatre) => theatre.name));
     };
     fetchTheatres();
-  }, []);
+  }, [selectedDate, locationId, route.params.movieId]); // Add selectedDate to dependencies array
 
   return (
     <View>
@@ -64,35 +56,33 @@ const MovieScreen = () => {
         <Calendar selected={selectedDate} onSelectDate={setSelectedDate} />
       </ScrollView>
 
-      {reqData.map((item, index) => (
+      {reqData.map((theatre, index) => (
         <View key={index}>
           <Pressable
             onPress={() =>
               setExpandedTheaters(
-                expandedTheaters.includes(item.name)
-                  ? expandedTheaters.filter((name) => name !== item.name)
-                  : [...expandedTheaters, item.name]
+                expandedTheaters.includes(theatre.name)
+                  ? expandedTheaters.filter((name) => name !== theatre.name)
+                  : [...expandedTheaters, theatre.name]
               )
             }
             style={{ marginHorizontal: 20, marginVertical: 10 }}
           >
-            <Text style={{ fontSize: 15, fontWeight: "500" }}>{item.name}</Text>
+            <Text style={{ fontSize: 15, fontWeight: "500" }}>{theatre.name}</Text>
           </Pressable>
-          {expandedTheaters.includes(item.name) && (
+          {expandedTheaters.includes(theatre.name) && (
             <FlatList
               numColumns={3}
-              data={item.showtimes}
-              renderItem={({ item, index }) => (
+              data={theatre.showtimes}
+              renderItem={({ item }) => (
                 <Pressable
                   onPress={() =>
                     navigation.navigate("Theatre", {
                       showtime: item.time,
-                      mall: mall,
                       name: route.params.title,
                       selectedDate: selectedDate,
                       rows: item.row,
                       docId: item._id,
-                      showtimeId: index,
                     })
                   }
                   style={{
@@ -125,5 +115,3 @@ const MovieScreen = () => {
 };
 
 export default MovieScreen;
-
-const styles = StyleSheet.create({});

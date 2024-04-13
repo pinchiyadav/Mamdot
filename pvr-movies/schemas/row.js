@@ -26,6 +26,10 @@ export default defineType({
               name: 'bookingStatus',
               type: 'string',
             },
+            {
+              name: 'Viewer',
+              type: 'string',
+            },
           ],
         },
       ],
