@@ -15,17 +15,19 @@ import SvgQRCode from "react-native-qrcode-svg";
 const TicketScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  console.log(route.params);
+
   const ticketPrice = route.params.seats.length * 220;
   const fee = 87;
   const grandTotal = ticketPrice + fee;
-  const TicketId = route.params.TicketId;
+  const { TicketId, viewerNames, name, date, phoneNo } = route.params;
+
   useLayoutEffect(() => {
     navigation.setOptions({
       gestureEnabled: false,
       headerShown: false
     });
   }, [navigation]);
+
   useEffect(() => {
     const backAction = () => {
       Alert.alert(
@@ -40,244 +42,117 @@ const TicketScreen = () => {
           {
             text: "OK",
             onPress: () => navigation.reset({ index: 0, routes: [{ name: "HomeScreen" }] }),
-      }
-    ]);
-    return true;  // Returning true prevents the event from bubbling up
-  };
+          }
+        ]
+      );
+      return true;  // Returning true prevents the event from bubbling up
+    };
 
-  const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => backHandler.remove();  // Correctly clean up the listener
+  }, [navigation]);
 
-  return () => backHandler.remove();  // Correctly clean up the listener
-}, [navigation]);
   return (
     <SafeAreaView>
-      <View
-        style={{
-          backgroundColor: "white",
-          height: "95%",
-          margin: 10,
-          borderRadius: 6,
-        }}
-      >
-        <View style={{ padding: 10 }}>
+      <View style={styles.ticketContainer}>
+        <View style={styles.headerContainer}>
           <Text>{route.params.mall}</Text>
         </View>
 
-        <View
-          style={{
-            marginHorizontal: 10,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text style={{ fontSize: 15, fontWeight: "500" }}>English 2D</Text>
-          <Text style={{ color: "red", fontSize: 15, fontWeight: "400" }}>
-            PVR TICKET
-          </Text>
+        <View style={styles.detailRow}>
+          <Text style={styles.boldText}>Movie</Text>
+          <Text style={styles.boldText}>{name}</Text>
         </View>
 
-        <Text
-          style={{
-            borderColor: "#DCDCDC",
-            borderWidth: 0.5,
-            borderStyle: "dashed",
-            marginTop: 8,
-            marginLeft: 8,
-            marginRight: 8,
-            height: 1,
-          }}
-        />
+        
 
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <View style={{ marginLeft: 10 }}>
-            <Text style={{ fontSize: 15, fontWeight: "500" }}>DATE & TIME</Text>
-            <Text style={{ marginTop: 6, fontSize: 15 }}>
+        <Text style={styles.dashedLine}/>
+
+        <View style={styles.sectionMargin}>
+          <View style={styles.detailRow}>
+            <Text>Date</Text>
+            <Text style={styles.grayText}>
+              {date}
+            </Text>
+          </View>
+          <View style={styles.detailRow}>
+            <Text>Time</Text>
+            <Text style={styles.grayText}>
               {route.params.showtime}
             </Text>
           </View>
-          <Image
-            style={{ width: 60, height: 60, borderRadius: 6, marginRight: 10 }}
-            source={{
-              uri: "https://www.pvrcinemas.com/assets/images/new_logo.png",
-            }}
-          />
         </View>
 
-        <Text
-          style={{
-            borderColor: "#DCDCDC",
-            borderWidth: 0.5,
-            borderStyle: "dashed",
-            marginTop: 4,
-            marginLeft: 8,
-            marginRight: 8,
-            height: 1,
-          }}
-        />
+        
 
-        <View style={{ marginHorizontal: 10, marginTop: 7 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text>AUDI 3</Text>
-            <Text style={{ color: "gray", fontWeight: "500" }}>
-              {route.params.seats.length} Tickets
+        
+
+        <Text style={styles.dashedLine}/>
+
+        <View style={styles.sectionMargin}>
+        
+          <View style={styles.detailRow}>
+            <Text>Tickets</Text>
+            <Text style={styles.grayText}>
+              {route.params.seats.length}
             </Text>
           </View>
         </View>
 
-        <View style={{ marginHorizontal: 10, marginTop: 7 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
+        <View style={styles.sectionMargin}>
+          <View style={styles.detailRow}>
             <Text>SEATS</Text>
-            <Text style={{ color: "gray", fontWeight: "500", color: "red" }}>
-              {route.params.selectedSeats}
-            </Text>
+            <Text style={{ color: "red", marginTop: 4, fontWeight: "500" }}>
+  {route.params.selectedSeats.join(" | ")}
+</Text>
           </View>
         </View>
 
-        <Text
-          style={{
-            borderColor: "#DCDCDC",
-            borderWidth: 0.5,
-            borderStyle: "dashed",
-            marginTop: 7,
-            marginLeft: 8,
-            marginRight: 8,
-            height: 1,
-          }}
-        />
-
-        <View
-          style={{
-            backgroundColor: "#FF6347",
-            borderRadius: 3,
-            margin: 10,
-            padding: 10,
-          }}
-        >
-          <Text style={{ fontSize: 15, fontWeight: "500", color: "white" }}>
-            Price Details
-          </Text>
-          <View
-            style={{
-              marginTop: 10,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text style={{ fontSize: 15, color: "white" }}>TOTAL</Text>
-            <Text style={{ fontWeight: "bold", fontSize: 17, color: "white" }}>
-              ₹{grandTotal}
-            </Text>
-          </View>
-
-          <View
-            style={{
-              marginTop: 10,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text style={{ fontSize: 15, color: "white" }}>
-              TICKETS {route.params.seats.length}
-            </Text>
-            <Text style={{ fontSize: 15, color: "white" }}>
-              ₹{route.params.seats.length * 220}
-            </Text>
-          </View>
-
-          <View
-            style={{
-              marginTop: 10,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text style={{ fontSize: 15, color: "white" }}>
-              Food & Beverages
-            </Text>
-          </View>
-
-          <View
-            style={{
-              marginTop: 10,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text style={{ fontSize: 15, fontWeight: "500", color: "white" }}>
-              Convenience Fee
-            </Text>
-            <Text style={{ fontSize: 15, fontWeight: "500", color: "white" }}>
-              ₹87
-            </Text>
-          </View>
+        <Text style={styles.dashedLine}/>
+        <View style={styles.sectionMargin}>
+        <View style={styles.detailRow}>
+          <Text>Phone No</Text>
+          <Text style={styles.grayText}>{phoneNo}</Text>
         </View>
-
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: 10,
-            marginBottom: 20,
-          }}
-        >
-                  <SvgQRCode value={TicketId}/>
-
         </View>
+        <Text style={styles.dashedLine}/>
 
-        <Text style={{ fontSize: 16, fontWeight: "500", textAlign: "center" }}>
-          {TicketId}
+        
+
+        <View style={styles.priceDetailContainer}>
+  
+  {/* Viewer Names and Seats */}
+  <View style={{ marginHorizontal: 10, marginTop: 7 }}>
+    <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 10, color: "white" }}>
+      Viewers
+    </Text>
+    {viewerNames.map((name, index) => (
+      <View key={index} style={styles.detailRow}>
+        <Text style={{ fontSize: 15, color: "white" }}>
+          Seat {route.params.selectedSeats[index]}
         </Text>
-        <Text
-          style={{
-            borderRadius: 1,
-            borderStyle: "dashed",
-            borderColor: "#DCDCDC",
-            height: 1,
-            borderWidth: 0.5,
-            margin: 10,
-          }}
-        />
+        <Text style={{ fontSize: 15, color: "white" }}>
+          {name}
+        </Text>
+      </View>
+    ))}
+  </View>
+</View>
+
+
+
+        <View style={styles.centerAlign}>
+          <SvgQRCode value={TicketId}/>
+        </View>
+
+        <Text style={styles.centerText}>{TicketId}</Text>
+        <Text style={styles.dashedLine}/>
 
         <Pressable
-          onPress={() =>
-            navigation.reset({ index: 0, routes: [{ name: "HomeScreen" }] })
-          }
-          style={{
-            backgroundColor: "#FF6347",
-            padding: 10,
-            marginLeft: "auto",
-            marginRight: "auto",
-            borderRadius:4,
-            marginTop:10,
-            marginBottom:10,
-          }}
+          onPress={() => navigation.reset({ index: 0, routes: [{ name: "HomeScreen" }] })}
+          style={styles.returnButton}
         >
-          <Text
-            style={{ color: "white", textAlign: "center", fontWeight: "500" }}
-          >
+          <Text style={styles.returnButtonText}>
             Return
           </Text>
         </Pressable>
@@ -288,4 +163,59 @@ const TicketScreen = () => {
 
 export default TicketScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  ticketContainer: {
+    backgroundColor: "white",
+    height: "95%",
+    margin: 10,
+    borderRadius: 6,
+  },
+  headerContainer: { padding: 10 },
+  detailRow: {
+    marginHorizontal: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  boldText: { fontSize: 15, fontWeight: "500" },
+  redText: { color: "red" },
+  dashedLine: {
+    borderColor: "#DCDCDC",
+    borderWidth: 0.5,
+    borderStyle: "dashed",
+    marginTop: 8,
+    marginLeft: 8,
+    marginRight: 8,
+    height: 1,
+  },
+  dateContainer: { marginLeft: 10 },
+  dateText: { marginTop: 6, fontSize: 15 },
+  logoImage: { width: 60, height: 60, borderRadius: 6, marginRight: 10 },
+  sectionMargin: { marginHorizontal: 10, marginTop: 7 },
+  grayText: { color: "gray", fontWeight: "500" },
+  priceDetailContainer: {
+    backgroundColor: "#FF6347",
+    borderRadius: 3,
+    margin: 10,
+    padding: 10,
+  },
+  whiteText: { fontSize: 15, fontWeight: "500", color: "white" },
+  whiteBoldText: { fontWeight: "bold", fontSize: 17, color: "white" },
+  centerAlign: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  centerText: { fontSize: 16, fontWeight: "500", textAlign: "center" },
+  returnButton: {
+    backgroundColor: "#FF6347",
+    padding: 10,
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderRadius: 4,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  returnButtonText: { color: "white", textAlign: "center", fontWeight: "500" },
+});

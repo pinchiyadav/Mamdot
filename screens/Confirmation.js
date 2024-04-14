@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const ConfirmationScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
+  const [phoneNo, setPhoneNo] = useState("");  // State to store the phone number
 
   const generateTicketId = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -51,6 +52,7 @@ const ConfirmationScreen = () => {
           [`row[${rowIndex}].seats[${seatIndex}].bookingStatus`]: "disabled",
           [`row[${rowIndex}].seats[${seatIndex}].TicketId`]: ticketId,
           [`row[${rowIndex}].seats[${seatIndex}].viewer`]: viewerNames[index],
+          [`row[${rowIndex}].seats[${seatIndex}].PhoneNo`]: phoneNo,
         })
         .commit()
         .then((updatedDoc) => {
@@ -67,12 +69,14 @@ const ConfirmationScreen = () => {
   
     const ticketDetails = {
       TicketId: ticketId,
-      selectedSeats: result,
-      mall: route.params.mall,
-      showtime: route.params.showtime,
-      date: route.params.date,
-      name: route.params.name,
-      seats: route.params.selectedSeats
+  selectedSeats: route.params.selectedSeats.map(seat => seat.row + seat.seat),  // Ensure this concatenates correctly
+  mall: route.params.mall,
+  showtime: route.params.showtime,
+  date: route.params.selectedDate,
+  name: route.params.name,
+  seats: route.params.selectedSeats,  // Assuming this contains objects or proper concatenation
+  viewerNames: viewerNames,  // Include viewer names here
+  phoneNo: phoneNo,
     };
   
     navigation.navigate("Ticket", ticketDetails);
@@ -114,13 +118,24 @@ const ConfirmationScreen = () => {
         </View>
 
         <View style={{ height: 1, borderColor: "#E0E0E0", borderWidth: 1, marginTop: 6 }} />
+        {/* Add Phone Number Input */}
+        <View style={{ marginTop: 10 ,flexDirection: "row", alignItems: "left",}}>
+          <Text style={{ fontSize: 15, fontWeight: "500" }}>Phone Number:</Text>
+          <TextInput
+            style={{ backgroundColor: "#E0E0E0", borderRadius: 4, padding: 5, flex: 1, marginLeft: 20 ,marginTop:-3}}
+            onChangeText={setPhoneNo}
+            value={phoneNo}
+            placeholder="Enter phone number"
+            keyboardType="phone-pad"
+          />
+        </View>
 
         {/* Tickets and viewer names entry */}
         <View>
         <View
             style={{
               padding: 0,
-              marginTop: 10,
+              marginTop: 20,
               flexDirection: "row",
               alignItems: "left",
               justifyContent: "space-between",

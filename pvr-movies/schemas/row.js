@@ -34,6 +34,10 @@ export default defineType({
               name: 'TicketId',
               type: 'string',
             },
+            {
+              name: 'PhoneNo',
+              type: 'string',
+            },
           ],
         },
       ],
