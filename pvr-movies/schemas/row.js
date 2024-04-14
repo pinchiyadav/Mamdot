@@ -27,7 +27,11 @@ export default defineType({
               type: 'string',
             },
             {
-              name: 'Viewer',
+              name: 'viewer',
+              type: 'string',
+            },
+            {
+              name: 'TicketId',
               type: 'string',
             },
           ],

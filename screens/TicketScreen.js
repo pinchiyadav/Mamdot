@@ -6,11 +6,11 @@ import {
   Image,
   Pressable,
   Alert,
-  BackHandler,
-} from "react-native";
+  BackHandler
+} from 'react-native';
 import React, { useEffect, useLayoutEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+import SvgQRCode from "react-native-qrcode-svg";
 
 const TicketScreen = () => {
   const route = useRoute();
@@ -19,12 +19,13 @@ const TicketScreen = () => {
   const ticketPrice = route.params.seats.length * 220;
   const fee = 87;
   const grandTotal = ticketPrice + fee;
+  const TicketId = route.params.TicketId;
   useLayoutEffect(() => {
     navigation.setOptions({
       gestureEnabled: false,
-      gestureDirection: "horizontal",
+      headerShown: false
     });
-  }, []);
+  }, [navigation]);
   useEffect(() => {
     const backAction = () => {
       Alert.alert(
@@ -38,21 +39,16 @@ const TicketScreen = () => {
           },
           {
             text: "OK",
-            onPress: () =>
-              navigation.reset({ index: 0, routes: [{ name: "HomeScreen" }] }),
-          },
-        ],
-        { cancelable: false }
-      );
+            onPress: () => navigation.reset({ index: 0, routes: [{ name: "HomeScreen" }] }),
+      }
+    ]);
+    return true;  // Returning true prevents the event from bubbling up
+  };
 
-      const backHandler = BackHandler.addEventListener(
-        "hardwareBackPress",
-        backAction
-      );
+  const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
 
-      return () => backHandler.remove();
-    };
-  }, []);
+  return () => backHandler.remove();  // Correctly clean up the listener
+}, [navigation]);
   return (
     <SafeAreaView>
       <View
@@ -247,10 +243,12 @@ const TicketScreen = () => {
             marginBottom: 20,
           }}
         >
+                  <SvgQRCode value={TicketId}/>
+
         </View>
 
         <Text style={{ fontSize: 16, fontWeight: "500", textAlign: "center" }}>
-          W33JNK3
+          {TicketId}
         </Text>
         <Text
           style={{
