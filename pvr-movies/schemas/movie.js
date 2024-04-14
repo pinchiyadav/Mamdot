@@ -21,9 +21,6 @@ export default defineType({
             name:'original_language',
             type:'string',
         },
-        {
-            name:'Censor_Rating',
-            type:'string',
-        }
+        
     ]
 })
