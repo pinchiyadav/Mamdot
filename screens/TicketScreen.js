@@ -142,11 +142,11 @@ const TicketScreen = () => {
 
 
         <View style={styles.centerAlign}>
-          <SvgQRCode value={TicketId}/>
+        { /* <SvgQRCode value={TicketId}/> */}
         </View>
 
         <Text style={styles.centerText}>{TicketId}</Text>
-        <Text style={styles.dashedLine}/>
+        <Text style={{...styles.dashedLine, marginTop:40}}/>
 
         <Pressable
           onPress={() => navigation.reset({ index: 0, routes: [{ name: "HomeScreen" }] })}

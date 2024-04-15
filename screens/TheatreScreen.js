@@ -142,12 +142,12 @@ const TheatreScreen = () => {
             let labelContent = '';
             let labelStyle = styles.seatLabel;
             if (row.row === 'A') {
-              labelContent = "RECLINER - Rs. 450";
-            } else if (row.row === 'B') {
-              labelContent = "DIAMOND - Rs. 400";
-              labelStyle = [styles.seatLabel, { marginTop: 10 }];
+              labelContent = "Offrs";
             } else if (row.row === 'E') {
-              labelContent = "PLATINUM - Rs. 350";
+              labelContent = "JCO";
+              labelStyle = [styles.seatLabel, { marginTop: 40 }];
+            } else if (row.row === 'G') {
+              labelContent = "ORs";
             }
 
             const isRowDisabled =
@@ -178,7 +178,7 @@ const TheatreScreen = () => {
                     {row.seats.map((seat, seatIndex) => {
                       const isLastSeatInRowB = seatIndex === 4 && row.row === 'B';
                       const isLastSeatInRowA = seatIndex === 8 && row.row === 'A';
-                      const separator = isLastSeatInRowA ? <View style={{ width: 0 }}/> : isLastSeatInRowB ? <View style={{ width: 420 }}/> : seatIndex === 8 ? <View style={{ width: 20 }}/> : null;
+                      const separator = isLastSeatInRowA ? <View style={{ width: 0 }}/> : isLastSeatInRowB ? <View style={{ width: 500 }}/> : seatIndex === 8 ? <View style={{ width: 100 }}/> : null;
                       const isBooked = seat.bookingStatus === "disabled";
                       return (
                         <React.Fragment key={seatIndex}>
@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 16,
     fontWeight: 'bold',
-    paddingVertical: 8,
+    paddingVertical: 0,
     backgroundColor: 'transparent',
   },
   screenIndicator: {

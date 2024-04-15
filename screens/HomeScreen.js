@@ -73,7 +73,6 @@ const HomeScreen = () => {
           style={{ flexDirection: "row", alignItems: "center", gap: 4 }}
         >
           <Ionicons
-            onPress={() => navigation.navigate("Places")}
             name="location-outline"
             size={24}
             color="black"

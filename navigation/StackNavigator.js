@@ -66,7 +66,7 @@ function Navigation() {
           name="MyTicketsScreen"
           component={MyTicketsStackScreens}
           options={{
-            tabBarLabel: "Ticket",
+            tabBarLabel: "My Tickets",
             tabBarLabelStyle: { color: "black" },
             headerShown: false,
             tabBarIcon: ({ focused }) =>

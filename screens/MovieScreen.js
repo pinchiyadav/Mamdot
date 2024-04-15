@@ -33,7 +33,7 @@ const MovieScreen = () => {
       const response = await client.fetch(
         `*[_type == "theatre" && location._ref == "${locationId}"]{
           ...,
-          "showtimes": *[_type == 'showtimes' && time != "" && date == "${selectedDate}" && references(^._id) && references('movie', "${route.params.movieId}")]{
+          "showtimes": *[_type == 'showtimes' && time != "Blank" && date == "${selectedDate}" && references(^._id) && references('movie', "${route.params.movieId}")]{
             _id,
             time,
             row,

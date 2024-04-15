@@ -18,6 +18,9 @@ const ConfirmationScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const [phoneNo, setPhoneNo] = useState("");  // State to store the phone number
+  const [viewerNames, setViewerNames] = useState(
+    route.params.selectedSeats.map(() => '')
+  );
 
   const generateTicketId = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -29,9 +32,6 @@ const ConfirmationScreen = () => {
   };
   
   const ticketId = generateTicketId();
-  const [viewerNames, setViewerNames] = useState(
-    route.params.selectedSeats.map(() => '')
-  );
 
   const handleViewerNameChange = (text, index) => {
     const updatedNames = [...viewerNames];
@@ -40,6 +40,16 @@ const ConfirmationScreen = () => {
   };
 
   const pay = async() => {
+    if (phoneNo.trim() === "") {
+      Alert.alert("Error", "Please enter a valid phone number");
+      return;
+    }
+
+    if (viewerNames.some(name => name.trim() === "")) {
+      Alert.alert("Error", "Please enter viewer names for all selected seats");
+      return;
+    }
+
     const updatedRows = [...route.params.rows];
 
     route.params.selectedSeats.forEach((seat, index) => {
@@ -69,14 +79,14 @@ const ConfirmationScreen = () => {
   
     const ticketDetails = {
       TicketId: ticketId,
-  selectedSeats: route.params.selectedSeats.map(seat => seat.row + seat.seat),  // Ensure this concatenates correctly
-  mall: route.params.mall,
-  showtime: route.params.showtime,
-  date: route.params.selectedDate,
-  name: route.params.name,
-  seats: route.params.selectedSeats,  // Assuming this contains objects or proper concatenation
-  viewerNames: viewerNames,  // Include viewer names here
-  phoneNo: phoneNo,
+      selectedSeats: route.params.selectedSeats.map(seat => seat.row + seat.seat),  // Ensure this concatenates correctly
+      mall: route.params.mall,
+      showtime: route.params.showtime,
+      date: route.params.selectedDate,
+      name: route.params.name,
+      seats: route.params.selectedSeats,  // Assuming this contains objects or proper concatenation
+      viewerNames: viewerNames,  // Include viewer names here
+      phoneNo: phoneNo,
     };
   
     navigation.navigate("Ticket", ticketDetails);
@@ -89,9 +99,9 @@ const ConfirmationScreen = () => {
       tickets.push(ticketDetails);
       await AsyncStorage.setItem('tickets', JSON.stringify(tickets));
       console.log('Tickets saved:', tickets);  // Debug statement
-  } catch (err) {
+    } catch (err) {
       console.error("Failed to save tickets", err);
-  }
+    }
   };
 
   return (
