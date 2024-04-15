@@ -261,7 +261,7 @@ const TheatreScreen = () => {
               style={styles.legendIcon}
               name="square"
               size={24}
-              color="#ffc40c"
+              color="#F84464"
             />
             <Text>selected</Text>
           </View>
@@ -294,7 +294,7 @@ const TheatreScreen = () => {
           onPress={pay}
         >
           <Text style={styles.footerButtonText}>
-            {selectedSeats.length} seat's selected {result}
+            {selectedSeats.length} seats selected {result}
           </Text>
           <Text style={styles.footerButtonText}>Proceed</Text>
         </Pressable>
@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   selectedUserButton: {
-    backgroundColor: "#FEBE10",
+    backgroundColor: "#F84464",
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginHorizontal: 5,
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     borderColor: "#C0C0C0",
   },
   selectedSeat: {
-    backgroundColor: "#FFD700",
+    backgroundColor: "#f55d78",
     borderColor: "transparent",
   },
   bookedSeat: {
@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   footerButton: {
-    backgroundColor: "#FEBE10",
+    backgroundColor: "#F84464",
     padding: 20,
     flexDirection: "row",
     alignItems: "center",
@@ -398,6 +398,7 @@ const styles = StyleSheet.create({
   footerButtonText: {
     fontSize: 15,
     fontWeight: "500",
+    color:'white'
   },
   disabledSeat: {
     opacity: 0.5,

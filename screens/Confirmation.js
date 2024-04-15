@@ -30,7 +30,7 @@ const ConfirmationScreen = () => {
     }
     return ticketId;
   };
-  
+
   const ticketId = generateTicketId();
 
   const handleViewerNameChange = (text, index) => {
@@ -39,11 +39,8 @@ const ConfirmationScreen = () => {
     setViewerNames(updatedNames);
   };
 
-  const pay = async() => {
-    if (phoneNo.trim() === "") {
-      Alert.alert("Error", "Please enter a valid phone number");
-      return;
-    }
+  const pay = async () => {
+    
 
     if (viewerNames.some(name => name.trim() === "")) {
       Alert.alert("Error", "Please enter viewer names for all selected seats");
@@ -76,7 +73,7 @@ const ConfirmationScreen = () => {
 
     const seatNumbers = route.params.selectedSeats.map((seat) => seat.row + seat.seat);
     const result = seatNumbers.join(" ");
-  
+
     const ticketDetails = {
       TicketId: ticketId,
       selectedSeats: route.params.selectedSeats.map(seat => seat.row + seat.seat),  // Ensure this concatenates correctly
@@ -88,10 +85,10 @@ const ConfirmationScreen = () => {
       viewerNames: viewerNames,  // Include viewer names here
       phoneNo: phoneNo,
     };
-  
+
     navigation.navigate("Ticket", ticketDetails);
 
-  
+
     // Save to AsyncStorage
     try {
       const storedTickets = await AsyncStorage.getItem('tickets');
@@ -108,41 +105,30 @@ const ConfirmationScreen = () => {
     <View style={{ padding: 20 }}>
       <View style={{ backgroundColor: "white", padding: 10, borderRadius: 6 }}>
         {/* Movie details */}
-        <View>
-          <Text style={{ fontSize: 15, fontWeight: "500" }}>{route.params.name}</Text>
-          <Text style={{ marginVertical: 4, color: "gray" }}>U • A English</Text>
-          <Text>{route.params.selectedDate}</Text>
-        </View>
 
-        <View style={{ height: 1, borderColor: "#E0E0E0", borderWidth: 1, marginTop: 6 }} />
+
 
         {/* Theater details */}
+
+        <View style={styles.sectionMargin}>
+          <View style={styles.detailRow}>
+            <Text style={{ fontSize: 15, fontWeight: "500" }}>{route.params.name}</Text>
+            <Text style={{ color: "red", marginTop: 4, fontWeight: "500", marginBottom: 0 }}>
+              {route.params.seats} 
+            </Text></View>
+          <Text style={{ marginVertical: 10, color: "gray" }}>{route.params.selectedDate} | {route.params.showtime}</Text>
+        </View>
         <View>
-          <Text style={{ fontSize: 15, fontWeight: "500" }}>{route.params.mall}</Text>
-          <Text style={{ fontSize: 15, fontWeight: "500", marginTop: 4, color: "gray" }}>
-            AUDI 02 • CLASSIC
-          </Text>
-          <Text style={{ color: "red", marginTop: 4, fontWeight: "500" }}>
-            {route.params.seats} | {route.params.showtime}
-          </Text>
+
         </View>
 
         <View style={{ height: 1, borderColor: "#E0E0E0", borderWidth: 1, marginTop: 6 }} />
         {/* Add Phone Number Input */}
-        <View style={{ marginTop: 10 ,flexDirection: "row", alignItems: "left",}}>
-          <Text style={{ fontSize: 15, fontWeight: "500" }}>Phone Number:</Text>
-          <TextInput
-            style={{ backgroundColor: "#E0E0E0", borderRadius: 4, padding: 5, flex: 1, marginLeft: 20 ,marginTop:-3}}
-            onChangeText={setPhoneNo}
-            value={phoneNo}
-            placeholder="Enter phone number"
-            keyboardType="phone-pad"
-          />
-        </View>
+
 
         {/* Tickets and viewer names entry */}
         <View>
-        <View
+          <View
             style={{
               padding: 0,
               marginTop: 20,
@@ -152,19 +138,19 @@ const ConfirmationScreen = () => {
             }}
           >
             <Text style={{ fontSize: 15, fontWeight: "500" }}>
-              TICKETS 
+              TICKETS
             </Text>
             <Text style={{ fontSize: 15, fontWeight: "500" }}>
-            {route.params.selectedSeats.length}
+              {route.params.selectedSeats.length}
             </Text>
           </View>
           {route.params.selectedSeats.map((seat, index) => (
-            <View key={index} style={{ flexDirection: 'row', alignItems: 'left', justifyContent: 'space-between' , marginTop:20}}>
+            <View key={index} style={{ flexDirection: 'row', alignItems: 'left', justifyContent: 'space-between', marginTop: 20 }}>
               <Text style={{ fontSize: 15, fontWeight: "500" }}>
                 Seat {seat.row}{seat.seat}:
               </Text>
               <TextInput
-                style={{ backgroundColor: "#E0E0E0", borderRadius: 4, padding: 5, flex: 1, marginLeft: 20 ,marginTop:-4}}
+                style={{ backgroundColor: "#E0E0E0", borderRadius: 4, padding: 5, flex: 1, marginLeft: 20, marginTop: -4 }}
                 onChangeText={(text) => handleViewerNameChange(text, index)}
                 value={viewerNames[index]}
                 placeholder="Viewer name"
@@ -177,7 +163,7 @@ const ConfirmationScreen = () => {
       <Pressable
         style={{
           marginTop: 10,
-          backgroundColor: "#FFC72C",
+          backgroundColor: "#F84464",
           padding: 10,
           borderRadius: 4,
           justifyContent: "center",
@@ -192,3 +178,60 @@ const ConfirmationScreen = () => {
 };
 
 export default ConfirmationScreen;
+
+const styles = StyleSheet.create({
+  ticketContainer: {
+    backgroundColor: "white",
+    height: "95%",
+    margin: 10,
+    borderRadius: 6,
+  },
+  headerContainer: { padding: 10 },
+  detailRow: {
+    marginHorizontal: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  boldText: { fontSize: 15, fontWeight: "500" },
+  redText: { color: "red" },
+  dashedLine: {
+    borderColor: "#DCDCDC",
+    borderWidth: 0.5,
+    borderStyle: "dashed",
+    marginTop: 8,
+    marginLeft: 8,
+    marginRight: 8,
+    height: 1,
+  },
+  dateContainer: { marginLeft: 10 },
+  dateText: { marginTop: 6, fontSize: 15 },
+  logoImage: { width: 60, height: 60, borderRadius: 6, marginRight: 10 },
+  sectionMargin: { marginHorizontal: 10, marginTop: 7 },
+  grayText: { color: "gray", fontWeight: "500" },
+  priceDetailContainer: {
+    backgroundColor: "#F84464",
+    borderRadius: 3,
+    margin: 10,
+    padding: 10,
+  },
+  whiteText: { fontSize: 15, fontWeight: "500", color: "white" },
+  whiteBoldText: { fontWeight: "bold", fontSize: 17, color: "white" },
+  centerAlign: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  centerText: { fontSize: 16, fontWeight: "500", textAlign: "center" },
+  returnButton: {
+    backgroundColor: "#F84464",
+    padding: 10,
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderRadius: 4,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  returnButtonText: { color: "white", textAlign: "center", fontWeight: "500" },
+});

@@ -13,7 +13,7 @@ const Date = ({ date, selected, onSelectDate }) => {
       onPress={() => onSelectDate(fullDate)}
       style={[
         styles.container,
-        selected === fullDate && { backgroundColor: "#FFD700" },
+        selected === fullDate && { backgroundColor: "#F84464" },
       ]}
     >
       <Text

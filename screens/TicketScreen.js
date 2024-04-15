@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   sectionMargin: { marginHorizontal: 10, marginTop: 7 },
   grayText: { color: "gray", fontWeight: "500" },
   priceDetailContainer: {
-    backgroundColor: "#FF6347",
+    backgroundColor: "#F84464",
     borderRadius: 3,
     margin: 10,
     padding: 10,
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
   },
   centerText: { fontSize: 16, fontWeight: "500", textAlign: "center" },
   returnButton: {
-    backgroundColor: "#FF6347",
+    backgroundColor: "#F84464",
     padding: 10,
     marginLeft: "auto",
     marginRight: "auto",

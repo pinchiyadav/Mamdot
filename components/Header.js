@@ -18,7 +18,7 @@ import {
         >
           <Pressable
             style={{
-              height: 60,
+              height: 50,
               backgroundColor: "white",
               padding: 10,
               borderRadius: 5,

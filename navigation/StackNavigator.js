@@ -2,7 +2,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/HomeScreen";
-import PlacesScreen from "../screens/PlacesScreen";
 import ProfileScreen from "../screens/MyTicketsScreen";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -21,7 +20,6 @@ function HomeStackScreens() {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen name="HomeScreen" component={HomeScreen} options={{ title: "" }} />
-      <HomeStack.Screen name="Places" component={PlacesScreen} />
       <HomeStack.Screen name="Movie" component={MovieScreen} />
       <HomeStack.Screen name="Theatre" component={TheatreScreen} />
       <HomeStack.Screen name="Confirm" component={Confirmation} />

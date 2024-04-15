@@ -27,12 +27,12 @@ import {
         >
           <Image
             source={{
-              uri: `https://image.tmdb.org/t/p/original/${item?.poster_path}`,
+              uri: `${item?.poster_path}`,
             }}
             style={{
               width: "100%",
               height: "70%",
-              resizeMode: "contain",
+              resizeMode: "cover",  // Changed from "contain" to "cover"
               borderRadius: 7,
             }}
           />
